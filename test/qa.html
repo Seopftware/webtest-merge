@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Airbridge WebSDK 1.6.0</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+</head>
+<body>
+
+    <div class="container" style="padding-top: 50px;">
+        <h1>Airbridge WebSDK 1.6.0</h1>
+
+        <form onsubmit="return updateInfo();">
+            <div class="form-group">
+                <label for="input-email">User Email</label>
+                <input type="email" class="form-control" id="input-email" value="hyojun@ab180.co" aria-describedby="emailHelp" placeholder="Enter email">
+                <small id="emailHelp" class="form-text text-muted">에어브릿지 웹이벤트에 들어갈 사용자 이메일 정보입니다.</small>
+            </div>
+            <div class="form-group">
+                <label for="input-gaid">GAID</label>
+                <input type="text" class="form-control" id="input-gaid" placeholder="Google ADID (Optional)">
+                <small id="gaidHelp" class="form-text text-muted">에어브릿지 웹이벤트에 들어갈 GAID 정보입니다. device_uuid로 DB에 저장됩니다.</small>
+            </div>
+            <button type="submit" class="btn btn-primary">파라미터 업데이트</button>
+        </form>
+
+        <br><br>
+        <h5 id="client-id">Client ID (For debug) : </h5>
+
+        <h5>웹이벤트 (9320) 보내기 버튼 : </h5>
+
+        <button type="button" onclick="airbridge.events.signUp()" class="btn btn-secondary">회원가입</button>
+        <button type="button" onclick="airbridge.events.addedToCart()" class="btn btn-secondary ">장바구니</button>
+        <button type="button" onclick="airbridge.events.purchased()" class="btn btn-secondary">구매</button>
+        <button type="button" onclick="airbridge.events.signIn()" class="btn btn-secondary">로그인</button>
+        <button type="button" onclick="airbridge.events.signOut()" class="btn btn-secondary">로그아웃</button>
+
+        <br><br>
+        <h5>딥링크 테스트 버튼 : </h5>
+        <button type="button" id="button-launch-ablog" class="btn btn-lg btn-primary">Ablog 앱 열기</button>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>
+        (function(a_,i_,r_,_b,_r,_i,_d,_g,_e){if(!a_[_b]||!a_[_b].queue){_g=i_.getElementsByTagName(r_)[0];a_[_b]={queue:[]};_d={};for(_i=0;_i<_r.length;_d={m:_d.m},_i++)_d.m=_r[_i],~_d.m.indexOf(".")&&(_e=_d.m.split(".")[0],a_[_b][_e]=a_[_b][_e]||{},a_[_b][_e][_d.m.split(".")[1]]=function(_d){return function(){a_[_b].queue.push([_d.m,arguments])}}(_d)),a_[_b][_d.m]=function(_d){return function(){a_[_b].queue.push([_d.m,arguments])}}(_d);_d=i_.createElement(r_);_d.async=1;_d.src="http://static.airbridge.io/sdk/dist/airbridge.dev.min.js";_g.parentNode.insertBefore(_d,_g)}})(window,document,"script","airbridge",
+            "init setBanner setDownload setDeeplinks sendSMS sendWeb setUserAgent setUserId setUserEmail setDeviceIFV setDeviceIFA setDeviceGAID events.send events.signIn events.signUp events.signOut events.purchased events.addedToCart events.productDetailsViewEvent events.homeViewEvent events.productListViewEvent events.searchResultViewEvent".split(" "));
+
+        airbridge.init({
+            app: 'ablog',
+            appToken: '38acf1efa9fc4f0987173f5a76516eb1',
+            defaultChannel: "websdk-test_2018",
+            defaultParams: {
+                'medium': 'sms',
+                'campaign': '20180102-websdk-qa',
+                'dynamic_client_id': 11
+            }
+        }, function(err,res) {
+            console.log(err,res);
+            $('#client-id').text('Client ID (For debug) : ' + airbridge.client.clientId);
+        });
+
+        // should see airbanner
+        airbridge.setBanner({
+            desktopInstall: true,
+            title: '에어브릿지 블로그',
+            description: '테스트와 빡코딩에 지치셨나요? 이 블로그는 무료로 해줍니다!',
+            keyColor: '#00a0c6',
+            position: 1
+        });
+
+        // should launch deep link when clicked
+        airbridge.setDeeplinks({
+            buttonID: 'button-launch-ablog',
+            deeplinks: {
+                ios: 'ablog://main',
+                android: 'ablog://sigong',
+                desktop: 'http://blog.ab180.co/data-science-with-r-2-data-visualization',
+            },
+            desktopPopUp: true,
+        });
+
+        // should send signin event
+        airbridge.setUserEmail('hyojun@ab180.co');
+        // airbridge.events.signIn();
+
+        function updateInfo() {
+            console.log('Updating info..');
+            var email = $('#input-email').val();
+            var gaid = $('#input-gaid').val();
+
+            if (email && email.length === 0) email = null;
+            if (gaid && gaid.length === 0) gaid = null;
+
+            if (email) airbridge.setUserEmail(email);
+            if (gaid) airbridge.setDeviceGAID(gaid);
+
+            return false;
+        }
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+  "name": "airbridge-websdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "notepad.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "make test",
+    "clean": "make clean",
+    "release": "make release",
+    "dev": "grunt dev",
+    "test": "mocha --reporter nyan --watch ./test ./src"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "falafel": "1.0.1",
+    "grunt": "~0.4.5",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-nodeunit": "~0.4.1",
+    "grunt-contrib-uglify": "~0.5.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-saucelabs": "^9.0.0",
+    "grunt-shell": "^1.3.1",
+    "mocha": "^2.5.3",
+    "mocha-phantomjs": "^4.1.0",
+    "sinon": "^1.17.4",
+    "webpack": "^1.13.1"
+  }
+}

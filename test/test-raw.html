@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Tests for Airbridge WEB SDK</title>
+    <script>
+      (function(a_, i_, r_, _b, _r, _i, _d, _g, _e) {
+          if (!a_[_b] || !a_[_b].queue) {
+              _g = i_.getElementsByTagName(r_)[0];
+              a_[_b] = {queue:[]};
+              _d = {};
+              for (_i = 0; _i < _r.length; _d = {m:_d.m}, _i++) {
+                  _d.m = _r[_i], ~_d.m.indexOf(".") && (_e = _d.m.split(".")[0], a_[_b][_e] = a_[_b][_e] || {}, a_[_b][_e][_d.m.split(".")[1]] = function(_d) {
+                      return function() {
+                          a_[_b].queue.push([_d.m, arguments]);
+                      };
+                  }(_d)), a_[_b][_d.m] = function(_d) {
+                      return function() {
+                          a_[_b].queue.push([_d.m, arguments]);
+                      };
+                  }(_d);
+              }
+              _d = i_.createElement(r_);
+              _d.async = 1;
+              _d.src = "../dist/airbridge.local.min.js";
+              _g.parentNode.insertBefore(_d, _g);
+          }
+      })(window, document, "script", "airbridge", "init setBanner setDownload setDeeplink setDeeplinks sendSMS sendWeb setUserAgent setUserId setUserEmail setUserPhone setUserAttributes setDeviceIFV setDeviceIFA setDeviceGAID events.send events.signIn events.signUp events.signOut events.purchased events.addedToCart events.productDetailsViewEvent events.homeViewEvent events.productListViewEvent events.searchResultViewEvent".split(" "));
+
+      // initialize (necessary)
+      airbridge.init({
+        app: 'ablog',
+        appToken: '38acf1efa9fc4f0987173f5a76516eb1',
+        utmParsing: true,
+        urlQueryMapping: {
+            'sub_id_1': 'DMSKW',
+            'term': 'DMCOL',
+            'sub_id_2': ['B', 'A']
+        },
+        shareCookieSubdomain: true,
+        cookieWindowInMinutes: 120
+      });
+
+      airbridge.setUserId('my-test-user-id');
+      airbridge.setUserPhone('1092454596');
+      airbridge.setDeviceIFA('my-ifa');
+
+      airbridge.setUserAttributes({
+          "gender": "m",
+          "age": 25,
+          "name": "hunjae-123",
+          "address": "guri",
+          "website": "http://airbridge.io"
+      })
+
+     airbridge.setBanner({
+        desktopInstall: true,
+        title: '에어브릿지',
+        description: '에어브릿지'
+    })
+
+     airbridge.setDeeplinks({
+        buttonID: 'button-launch-ablog',
+        deeplinks: {
+            ios: 'ablog://main',
+            android: 'ablog://sigong',
+            desktop: 'http://blog.ab180.co/data-science-with-r-2-data-visualization',
+        },
+        desktopPopUp: true
+    });
+        // send in-app event
+        airbridge.events.purchased();
+
+        window.onload = function() {
+
+        airbridge.setDownload({
+                buttonId: ["download-button-1", "download-button-2", "download-button-3"]
+        }, function(err, res) {
+            console.log("buttonId callback check")
+        });
+          document.getElementById("sms-button").onclick = function() {
+            airbridge.sendSMS({
+                phoneNum: document.getElementById("phone-number").value,
+                channel: 'hello'
+            }, function(err, res) {
+              console.log(err);
+               console.dir(res);
+            });
+          }
+
+        document.getElementById("signout-button").onclick = function() {
+            console.log("signout-button works")
+            airbridge.events.signOut();
+        }    
+    }
+    </script>
+  </head>
+  <body>
+    <h1>다운로드 버튼</h1>
+    <button id="download-button-1">앱 다운로드 버튼</button>
+    <button id="download-button-2">앱 다운로드 버튼</button>
+    <button id="download-button-3">앱 다운로드 버튼</button>
+
+    <h1>로그인</h1>
+    <button id="signin-button">로그인</button>
+    <button id="signup-button">회원가입</button>
+    <button id="signout-button">로그아웃</button>
+
+    <h1>SMS 보내기 버튼</h1>
+    <input id="phone-number"/>
+    <button id="sms-button">SMS button</div>
+    <button id="deeplink-button">Deeplink button</div>
+    <button type="button" id="button-launch-ablog" class="btn btn-lg btn-primary">Ablog 앱 열기</button>
+  </body>
+</html>

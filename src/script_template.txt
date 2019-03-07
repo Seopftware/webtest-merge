@@ -1,0 +1,38 @@
+// load airbridge websdk script (necessary)
+//INSERT CODE SNIPPETS
+
+// initialize (necessary)
+airbridge.init({
+  app: 'APP_NAME',
+  appToken: 'APP_TOKEN'
+})
+
+// set download button
+airbridge.setDownload({
+  buttonId: '$$DOWNLOAD-BUTTON$$'
+})
+
+// set deeplink button
+airbridge.setDeeplinks({
+  deeplinks: {
+    ios: '$$iOS$$',
+    android: '$$ANDROID$$',
+    desktop: '$$DESKTOP$$',
+  },
+  fallbacks: {
+    ios: 'itunes-appstore',
+    android: 'google-play'
+  },
+  buttonID: '$$DEEPLINK-BUTTON$$',
+  desktopPopUp: true
+})
+
+// send events
+airbridge.events.signIn({ userId: '$$USER_ID$$' });
+airbridge.events.signUp({ userId: '$$USER_ID$$' });
+
+// send custom events
+airbridge.events.send('$$CATEGORY$$', {
+  label: '$$LABEL$$',
+  action: '$$ACTION$$'
+})
